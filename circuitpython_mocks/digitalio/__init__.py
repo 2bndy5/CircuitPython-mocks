@@ -28,6 +28,7 @@ class Pull(Enum):
 
 class DigitalInOut(Expecting, ContextManaged):
     """A class that mocks :external:py:class:digitalio.DigitalInOut`"""
+
     def __init__(self, pin: Pin, **kwargs):
         super().__init__(**kwargs)
         self._pin = pin

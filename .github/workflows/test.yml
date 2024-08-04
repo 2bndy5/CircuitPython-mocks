@@ -1,0 +1,38 @@
+name: test/lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install -r tests/requirements.txt -e . -r requirements-dev.txt
+      - name: Cache pre-commit venv(s)
+        uses: actions/cache@v4
+        with:
+          path: '~/.cache/pre-commit'
+          key: pre-commit_${{ steps.setup-python.outputs.python-version }}_${{ hashfiles('.pre-commit-config.yaml') }}
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
+      - name: Run tests and collect coverage
+        run: coverage run -m pytest
+      - name: Create coverage report
+        run: coverage xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

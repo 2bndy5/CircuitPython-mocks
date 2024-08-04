@@ -8,7 +8,7 @@
 --------------------
 
 .. automodule:: circuitpython_mocks.busio.operations
-    
+
     I2C operations
     **************
 
