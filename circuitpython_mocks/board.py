@@ -1,6 +1,7 @@
-"""Mock pins"""
+"""A module that hosts mock pins."""
 
 class Pin:
+    """A dummy type for GPIO pins."""
     pass
 
 

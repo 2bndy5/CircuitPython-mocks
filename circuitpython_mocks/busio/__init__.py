@@ -1,3 +1,5 @@
+"""A module to mock the data bus transactions."""
+
 from enum import Enum, auto
 import sys
 from typing import List
@@ -5,18 +7,22 @@ from typing import List
 import circuitpython_typing
 
 from circuitpython_mocks.busio.operations import (
-    Read,
-    Write,
-    Transfer,
+    UARTRead,
+    UARTWrite,
     I2CRead,
     I2CWrite,
     I2CTransfer,
+    SPIRead,
+    SPIWrite,
+    SPITransfer,
 )
 from circuitpython_mocks._mixins import Expecting, Lockable
 from circuitpython_mocks.board import Pin
 
 
 class I2C(Expecting, Lockable):
+    """A mock of `busio.I2C` class."""
+
     def __init__(
         self,
         scl: Pin,
@@ -28,6 +34,8 @@ class I2C(Expecting, Lockable):
         super().__init__()
 
     def scan(self) -> List[int]:
+        """Returns an empty list.
+        Use :py:meth:`pytest.MonkeyPatch.setattr()` to change this output."""
         return []
 
     def readfrom_into(
@@ -38,6 +46,9 @@ class I2C(Expecting, Lockable):
         start: int = 0,
         end: int = sys.maxsize,
     ) -> None:
+        """A mock imitation of :external:py:meth:`busio.I2C.readfrom_into()`.
+        This function checks against `I2CRead`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for I2C.readfrom_into()"
         op = self.expectations.popleft()
         assert isinstance(op, I2CRead), f"Read operation expected, found {repr(op)}"
@@ -53,6 +64,9 @@ class I2C(Expecting, Lockable):
         start: int = 0,
         end: int = sys.maxsize,
     ) -> None:
+        """A mock imitation of :external:py:meth:`busio.I2C.writeto()`.
+        This function checks against `I2CWrite`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for I2C.writeto()"
         op = self.expectations.popleft()
         assert isinstance(op, I2CWrite), f"Read operation expected, found {repr(op)}"
@@ -70,6 +84,9 @@ class I2C(Expecting, Lockable):
         in_start: int = 0,
         in_end: int = sys.maxsize,
     ) -> None:
+        """A mock imitation of :external:py:meth:`busio.I2C.writeto_then_readfrom()`.
+        This function checks against `I2CTransfer`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for I2C.writeto_then_readfrom()"
         op = self.expectations.popleft()
         assert isinstance(
@@ -89,6 +106,7 @@ class SPI(Expecting, Lockable):
         MISO: Pin | None = None,
         half_duplex: bool = False,
     ):
+        """A class to mock :external:py:class:`busio.SPI`."""
         super().__init__()
         self._frequency = 1000000
 
@@ -100,10 +118,12 @@ class SPI(Expecting, Lockable):
         phase: int = 0,
         bits: int = 8,
     ) -> None:
+        """A dummy function to mock :external:py:meth:`busio.SPI.configure()`"""
         self._frequency = baudrate
 
     @property
     def frequency(self) -> int:
+        """Returns the value passed to ``baudrate`` parameter of `configure()`."""
         return self._frequency
 
     def write(
@@ -113,9 +133,12 @@ class SPI(Expecting, Lockable):
         start: int = 0,
         end: int = sys.maxsize,
     ) -> None:
+        """A function that mocks :external:py:meth:`busio.SPI.write()`.
+        This function checks against `SPIWrite`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for SPI.write()"
         op = self.expectations.popleft()
-        assert isinstance(op, Write), f"Read operation expected, found {repr(op)}"
+        assert isinstance(op, SPIWrite), f"Read operation expected, found {repr(op)}"
         op.assert_expected(buffer, start, end)
 
     def readinto(
@@ -126,9 +149,12 @@ class SPI(Expecting, Lockable):
         end: int = sys.maxsize,
         write_value: int = 0,
     ) -> None:
+        """A function that mocks :external:py:meth:`busio.SPI.readinto()`.
+        This function checks against `SPIRead`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for SPI.readinto()"
         op = self.expectations.popleft()
-        assert isinstance(op, Read), f"Read operation expected, found {repr(op)}"
+        assert isinstance(op, SPIRead), f"Read operation expected, found {repr(op)}"
         op.assert_response(buffer, start, end)
 
     def write_readinto(
@@ -141,10 +167,13 @@ class SPI(Expecting, Lockable):
         in_start: int = 0,
         in_end: int = sys.maxsize,
     ) -> None:
+        """A function that mocks :external:py:meth:`busio.SPI.write_readinto()`.
+        This function checks against `SPITransfer`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for I2C.writeto_then_readfrom()"
         op = self.expectations.popleft()
         assert isinstance(
-            op, Transfer
+            op, SPITransfer
         ), f"Transfer operation expected, found {repr(op)}"
         op.assert_transaction(
             out_buffer, in_buffer, out_start, out_end, in_start, in_end
@@ -152,9 +181,9 @@ class SPI(Expecting, Lockable):
 
 
 class UART(Expecting, Lockable):
-    class Parity(Enum):
-        """Parity Enumeration"""
+    """A class that mocks :external:py:class:`busio.UART`."""
 
+    class Parity(Enum):
         ODD = auto()
         EVEN = auto()
 
@@ -177,35 +206,47 @@ class UART(Expecting, Lockable):
         super().__init__()
 
     def read(self, nbytes: int | None = None) -> bytes | None:
+        """A function that mocks :external:py:meth:`busio.UART.read()`.
+        This function checks against `UARTRead`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for UART.read()"
         op = self.expectations.popleft()
-        assert isinstance(op, Read), f"Read operation expected, found {repr(op)}"
+        assert isinstance(op, UARTRead), f"Read operation expected, found {repr(op)}"
         length = nbytes or len(op.response)
         buffer = bytearray(length)
         op.assert_response(buffer, 0, length)
         return bytes(buffer)
 
     def readinto(self, buf: circuitpython_typing.WriteableBuffer) -> int | None:
+        """A function that mocks :external:py:meth:`busio.UART.readinto()`.
+        This function checks against `UARTRead`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for UART.readinto()"
         op = self.expectations.popleft()
-        assert isinstance(op, Read), f"Read operation expected, found {repr(op)}"
+        assert isinstance(op, UARTRead), f"Read operation expected, found {repr(op)}"
         len_buf = len(op.response)
         op.assert_response(buf, 0, len_buf)
         return len_buf
 
     def readline(self) -> bytes:
+        """A function that mocks :external:py:meth:`busio.UART.readline()`.
+        This function checks against `UARTRead`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for UART.readline()"
         op = self.expectations.popleft()
-        assert isinstance(op, Read), f"Read operation expected, found {repr(op)}"
+        assert isinstance(op, UARTRead), f"Read operation expected, found {repr(op)}"
         len_buf = len(op.response)
         buf = bytearray(len_buf)
         op.assert_response(buf, 0, len_buf)
         return bytes(buf)
 
     def write(self, buf: circuitpython_typing.ReadableBuffer) -> int | None:
+        """A function that mocks :external:py:meth:`busio.UART.write()`.
+        This function checks against `UARTWrite`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
         assert self.expectations, "no expectation found for UART.write()"
         op = self.expectations.popleft()
-        assert isinstance(op, Write), f"Read operation expected, found {repr(op)}"
+        assert isinstance(op, UARTWrite), f"Read operation expected, found {repr(op)}"
         len_buf = len(op.expected)
         op.assert_expected(buf, 0, len_buf)
         return len(buf) or None

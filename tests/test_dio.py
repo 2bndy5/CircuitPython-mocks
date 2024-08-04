@@ -1,4 +1,4 @@
-from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401
+from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401 (1)
 import pytest
 from circuitpython_mocks.digitalio.operations import SetState, GetState
 
@@ -18,7 +18,7 @@ def test_dio():
         with pytest.raises(AttributeError):
             dio.drive_mode
 
-        # set expectations for the CS pin
+        # set expectations for the pin state and do the test
         dio.expectations.append(GetState(True))
         assert dio.value
         dio.expectations.extend([SetState(False), SetState(True)])
@@ -29,5 +29,3 @@ def test_dio():
             dio.pull = Pull.UP
         assert dio.drive_mode == DriveMode.PUSH_PULL
         dio.value = True
-
-        # do test

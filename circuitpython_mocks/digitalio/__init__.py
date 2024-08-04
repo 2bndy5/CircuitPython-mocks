@@ -27,6 +27,7 @@ class Pull(Enum):
 
 
 class DigitalInOut(Expecting, ContextManaged):
+    """A class that mocks :external:py:class:digitalio.DigitalInOut`"""
     def __init__(self, pin: Pin, **kwargs):
         super().__init__(**kwargs)
         self._pin = pin
@@ -65,7 +66,9 @@ class DigitalInOut(Expecting, ContextManaged):
 
     @property
     def value(self):
-        """The Digital Pin Value"""
+        """The Digital Pin Value.
+        This property will check against `SetState` and `GetState`
+        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`."""
         assert self.expectations, "No expectations found for DigitalInOut.value.getter"
         op = self.expectations.popleft()
         assert isinstance(

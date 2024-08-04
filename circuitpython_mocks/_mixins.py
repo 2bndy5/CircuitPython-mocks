@@ -40,13 +40,17 @@ class Lockable(ContextManaged):
 
 
 class Expecting:
+    """A base class for the mock classes used to assert expected behaviors."""
     def __init__(self, **kwargs) -> None:
+        #: A double ended queue used to assert expected behavior
         self.expectations: deque[Read | Write | Transfer | SetState | GetState] = (
             deque()
         )
         super().__init__(**kwargs)
 
     def done(self):
+        """A function that asserts all `expectations` have been used.
+        This is automatically called from the destructor."""
         assert not self.expectations, (
             "Some expectations were unused:\n    "
             + "\n    ".join([repr(x) for x in self.expectations])

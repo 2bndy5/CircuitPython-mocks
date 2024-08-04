@@ -3,6 +3,8 @@ import circuitpython_typing as cir_py_types
 
 
 class Write:
+    """A class to identify a write operation over a data bus."""
+
     def __init__(self, expected: bytearray, **kwargs) -> None:
         self.expected = expected
         super().__init__(**kwargs)
@@ -25,6 +27,8 @@ class Write:
 
 
 class Read:
+    """A class to identify a read operation over a data bus."""
+
     def __init__(self, response: bytearray, **kwargs) -> None:
         self.response = response
         super().__init__(**kwargs)
@@ -48,6 +52,8 @@ class Read:
 
 
 class Transfer(Read, Write):
+    """A class to identify a read/write (transfer) operation over a data bus."""
+
     def __init__(self, expected: bytearray, response: bytearray, **kwargs) -> None:
         super().__init__(response=response, expected=expected, **kwargs)
 
@@ -93,6 +99,8 @@ class _I2CAddress:
 
 
 class I2CWrite(Write, _I2CAddress):
+    """A class to identify a write operation over a I2C bus."""
+
     def __init__(self, address: int, expected: bytearray) -> None:
         super().__init__(expected=expected, address=address)
 
@@ -103,6 +111,8 @@ class I2CWrite(Write, _I2CAddress):
 
 
 class I2CRead(Read, _I2CAddress):
+    """A class to identify a read operation over a I2C bus."""
+
     def __init__(self, address: int, response: bytearray) -> None:
         super().__init__(response=response, address=address)
 
@@ -113,6 +123,8 @@ class I2CRead(Read, _I2CAddress):
 
 
 class I2CTransfer(Transfer, _I2CAddress):
+    """A class to identify a write operation over a I2C bus."""
+
     def __init__(self, address: int, expected: bytearray, response: bytearray) -> None:
         super().__init__(expected=expected, response=response, address=address)
 
@@ -126,14 +138,20 @@ class I2CTransfer(Transfer, _I2CAddress):
 
 
 class SPIRead(Read):
+    """A class to identify a read operation over a SPI bus."""
+
     pass
 
 
 class SPIWrite(Write):
+    """A class to identify a write operation over a SPI bus."""
+
     pass
 
 
 class SPITransfer(Transfer):
+    """A class to identify a read/write (transfer) operation over a SPI bus."""
+
     def assert_transaction(
         self,
         out_buffer: cir_py_types.WriteableBuffer,
@@ -150,3 +168,15 @@ class SPITransfer(Transfer):
         super().assert_transaction(
             out_buffer, in_buffer, out_start, out_end, in_start, in_end
         )
+
+
+class UARTRead(Read):
+    """A class to identify a read operation over a UART bus."""
+
+    pass
+
+
+class UARTWrite(Write):
+    """A class to identify a write operation over a UART bus."""
+
+    pass

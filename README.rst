@@ -1,3 +1,8 @@
+.. |rtd-badge| image:: https://readthedocs.org/projects/circuitpython-mocks/badge/?version=latest
+    :target: https://circuitpython-mocks.readthedocs.io/en/latest/
+    :alt: Documentation Status
+
+|rtd-badge|
 
 Read The Docs
 =============
