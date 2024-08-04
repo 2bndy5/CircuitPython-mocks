@@ -2,7 +2,7 @@
 Read The Docs
 =============
 
-Documentation for this library is hosted at https://circuitpython-nrf24l01.rtfd.io/
+Documentation for this library is hosted at https://circuitpython-mocks.rtfd.io/
 
 About this Library
 ==================
