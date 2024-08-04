@@ -1,7 +1,7 @@
-from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401
+from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401 (1)
 from circuitpython_mocks.busio.operations import (
-    Read,
-    Write,
+    UARTRead,
+    UARTWrite,
 )
 
 
@@ -14,10 +14,10 @@ def test_uart():
         # set expectations for SPI bus
         serial.expectations.extend(
             [
-                Read(bytearray(1)),
-                Read(bytearray(1)),
-                Read(bytearray(1)),
-                Write(bytearray(1)),
+                UARTRead(bytearray(1)),
+                UARTRead(bytearray(1)),
+                UARTRead(bytearray(1)),
+                UARTWrite(bytearray(1)),
             ]
         )
 

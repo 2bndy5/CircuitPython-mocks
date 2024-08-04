@@ -1,0 +1,3 @@
+sphinx>8
+sphinx-immaterial
+sphinx-jinja

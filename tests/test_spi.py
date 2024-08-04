@@ -1,4 +1,4 @@
-from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401
+from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401 (1)
 from circuitpython_mocks.busio.operations import (
     SPIRead,
     SPIWrite,
