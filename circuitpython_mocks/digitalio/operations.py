@@ -16,7 +16,7 @@ class SetState(_State):
 
 
 class GetState(_State):
-    """A class to represent setting the state of a Digital output pin."""
+    """A class to represent getting the state of a Digital output pin."""
 
     def __repr__(self) -> str:
         return f"<GetState value='{self.state}'>"
