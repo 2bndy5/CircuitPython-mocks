@@ -170,7 +170,7 @@ class SPI(Expecting, Lockable):
         """A function that mocks :external:py:meth:`busio.SPI.write_readinto()`.
         This function checks against `SPITransfer`
         :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`"""
-        assert self.expectations, "no expectation found for I2C.writeto_then_readfrom()"
+        assert self.expectations, "no expectation found for SPI.write_readinto()"
         op = self.expectations.popleft()
         assert isinstance(
             op, SPITransfer
