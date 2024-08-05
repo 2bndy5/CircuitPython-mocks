@@ -1,4 +1,5 @@
-"""A module that hosts mock pins."""
+"""A module that hosts mock pins and default :py:class:`~busio.SPI`,
+:py:class:`~busio.I2C`, and :py:class:`~busio.UART` data buses."""
 
 
 class Pin:
@@ -6,6 +7,33 @@ class Pin:
 
     pass
 
+
+A0 = Pin()
+A1 = Pin()
+A2 = Pin()
+A3 = Pin()
+A4 = Pin()
+A5 = Pin()
+A6 = Pin()
+A7 = Pin()
+A8 = Pin()
+A9 = Pin()
+A10 = Pin()
+A11 = Pin()
+A12 = Pin()
+A13 = Pin()
+A14 = Pin()
+A15 = Pin()
+A16 = Pin()
+A17 = Pin()
+A18 = Pin()
+A19 = Pin()
+A20 = Pin()
+A21 = Pin()
+A22 = Pin()
+A23 = Pin()
+A24 = Pin()
+A25 = Pin()
 
 D0 = Pin()
 D1 = Pin()
@@ -121,7 +149,6 @@ SCK = Pin()
 TXD = Pin()
 RXD = Pin()
 
-# create alias for most of the examples
 TX = Pin()
 RX = Pin()
 
@@ -129,3 +156,32 @@ MISO_1 = Pin()
 MOSI_1 = Pin()
 SCLK_1 = Pin()
 SCK_1 = Pin()
+CS = Pin()
+
+WS = Pin()
+SD = Pin()
+
+LED = Pin()
+NEOPIXEL = Pin()
+DOTSTAR = Pin()
+
+
+def SPI(clock=SCK, MOSI=MOSI, MISO=MISO):
+    """Creates a default instance of :py:class:`~busio.SPI`"""
+    from circuitpython_mocks.busio import SPI as ImplSPI
+
+    return ImplSPI(clock, MOSI, MISO)
+
+
+def I2C(scl=SCL, sda=SDA):
+    """Creates a default instance of :py:class:`~busio.I2C`"""
+    from circuitpython_mocks.busio import I2C as ImplI2C
+
+    return ImplI2C(scl, sda)
+
+
+def UART(rx=RX, tx=TX):
+    """Creates a default instance of :py:class:`~busio.UART`"""
+    from circuitpython_mocks.busio import UART as ImplUART
+
+    return ImplUART(rx, tx)

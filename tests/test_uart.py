@@ -27,3 +27,12 @@ def test_uart():
         serial.readinto(buf)
         _result = serial.readline()
         assert serial.write(buf) == 1
+
+
+def test_default():
+    import board
+    from collections import deque
+
+    serial = board.UART()
+    assert hasattr(serial, "expectations")
+    assert isinstance(serial.expectations, deque)

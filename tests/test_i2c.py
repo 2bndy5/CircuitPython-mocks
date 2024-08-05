@@ -9,7 +9,6 @@ from circuitpython_mocks.busio.operations import (
 def test_i2c():
     import board
     from busio import I2C
-
     from adafruit_bus_device.i2c_device import I2CDevice
 
     address = 0x42
@@ -38,3 +37,12 @@ def test_i2c():
             i2c.write(buf, end=1)
         with i2c_dev as i2c:
             i2c.write_then_readinto(buf, buf, out_end=1, in_end=1)
+
+
+def test_default():
+    import board
+    from collections import deque
+
+    i2c = board.I2C()
+    assert hasattr(i2c, "expectations")
+    assert isinstance(i2c.expectations, deque)

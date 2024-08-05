@@ -10,9 +10,8 @@ from circuitpython_mocks.digitalio.operations import SetState
 def test_spi():
     from busio import SPI
     from digitalio import DigitalInOut
-
-    from adafruit_bus_device.spi_device import SPIDevice
     import board
+    from adafruit_bus_device.spi_device import SPIDevice
 
     # do setup
     with SPI(board.SCK, board.MOSI, board.MISO) as spi_bus:
@@ -41,3 +40,12 @@ def test_spi():
             spi.write(buf, end=1)
         with spi_dev as spi:
             spi.write_readinto(buf, buf, out_end=1, in_end=1)
+
+
+def test_default():
+    import board
+    from collections import deque
+
+    spi = board.SPI()
+    assert hasattr(spi, "expectations")
+    assert isinstance(spi.expectations, deque)

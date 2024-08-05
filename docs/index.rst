@@ -18,6 +18,7 @@ projects (with pytest).
 
             .. literalinclude:: ../tests/test_i2c.py
                 :language: python
+                :end-before: def test_default():
 
             .. code-annotations::
                 #. |pytest-used-import|
@@ -26,6 +27,7 @@ projects (with pytest).
 
             .. literalinclude:: ../tests/test_spi.py
                 :language: python
+                :end-before: def test_default():
 
             .. code-annotations::
                 #. |pytest-used-import|
@@ -34,6 +36,7 @@ projects (with pytest).
 
             .. literalinclude:: ../tests/test_uart.py
                 :language: python
+                :end-before: def test_default():
 
             .. code-annotations::
                 #. |pytest-used-import|
