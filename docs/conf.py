@@ -22,7 +22,11 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx_jinja",
 ]
+
 autodoc_class_signature = "separated"
+autodoc_default_options = {
+    "exclude-members": "__new__",
+}
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -32,7 +36,7 @@ jinja_contexts = {
         "pins": [
             x
             for x in dir(circuitpython_mocks.board)
-            if not x.startswith("_") and x != "Pin"
+            if not x.startswith("_") and x not in ("Pin", "board_id")
         ]
     }
 }
@@ -63,6 +67,7 @@ html_theme_options = {
     "features": [
         "navigation.top",
         "search.share",
+        "toc.follow",
     ],
     "palette": [
         {

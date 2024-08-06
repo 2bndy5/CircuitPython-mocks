@@ -2,7 +2,22 @@
 =================
 
 .. automodule:: circuitpython_mocks.busio
-    :members:
+
+    .. autoclass:: circuitpython_mocks.busio.I2C
+        :members: __init__, readfrom_into, writeto, writeto_then_readfrom, scan
+    .. autoclass:: circuitpython_mocks.busio.SPI
+        :members: __init__, readinto, write, write_readinto, configure, frequency
+    .. autoclass:: circuitpython_mocks.busio.UART
+        :members: __init__, readinto, readline, write
+
+        .. py:class:: circuitpython_mocks.busio.UART.Parity
+
+            A mock enumeration of :external:py:class:`busio.Parity`.
+
+            .. py:attribute:: ODD
+                :type: Parity
+            .. py:attribute:: EVEN
+                :type: Parity
 
 ``busio.operations``
 --------------------

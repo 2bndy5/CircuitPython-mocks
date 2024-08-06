@@ -3,7 +3,6 @@
 
 .. automodule:: circuitpython_mocks.board
     :members:
-    :undoc-members:
 
 This module includes the following dummy pins for soft-testing:
 
