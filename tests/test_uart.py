@@ -30,9 +30,17 @@ def test_uart():
 
 
 def test_default():
-    import board
+    # here we cannot import from the monkey-patched sys path because
+    # the mock modules use absolute imports.
+    from circuitpython_mocks import board, busio
     from collections import deque
 
-    serial = board.UART()
-    assert hasattr(serial, "expectations")
-    assert isinstance(serial.expectations, deque)
+    uart = board.UART()
+    assert hasattr(uart, "expectations")
+    assert isinstance(uart.expectations, deque)
+    uart_dupe = busio.UART(board.TX, board.RX)
+    assert uart == uart_dupe
+    uart.expectations.append(UARTRead(bytearray(1)))
+    assert uart_dupe.expectations == uart.expectations
+    _ = uart_dupe.expectations.popleft()
+    assert not uart.expectations

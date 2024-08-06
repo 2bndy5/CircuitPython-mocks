@@ -138,6 +138,8 @@ D99 = Pin()
 
 SDA = Pin()
 SCL = Pin()
+SDA1 = Pin()
+SCL1 = Pin()
 
 CE1 = Pin()
 CE0 = Pin()
@@ -166,22 +168,29 @@ NEOPIXEL = Pin()
 DOTSTAR = Pin()
 
 
-def SPI(clock=SCK, MOSI=MOSI, MISO=MISO):
+def SPI():
     """Creates a default instance of :py:class:`~busio.SPI`"""
     from circuitpython_mocks.busio import SPI as ImplSPI
 
-    return ImplSPI(clock, MOSI, MISO)
+    return ImplSPI(SCK, MOSI, MISO)
 
 
-def I2C(scl=SCL, sda=SDA):
+def I2C():
     """Creates a default instance of :py:class:`~busio.I2C`"""
     from circuitpython_mocks.busio import I2C as ImplI2C
 
-    return ImplI2C(scl, sda)
+    return ImplI2C(SCL, SDA)
 
 
-def UART(rx=RX, tx=TX):
+def STEMMA_I2C():
+    """Creates a default instance of :py:class:`~busio.I2C`"""
+    from circuitpython_mocks.busio import I2C as ImplI2C
+
+    return ImplI2C(SCL1, SDA1)
+
+
+def UART():
     """Creates a default instance of :py:class:`~busio.UART`"""
     from circuitpython_mocks.busio import UART as ImplUART
 
-    return ImplUART(rx, tx)
+    return ImplUART(TX, RX)

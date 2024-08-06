@@ -40,9 +40,27 @@ def test_i2c():
 
 
 def test_default():
-    import board
+    # here we cannot import from the monkey-patched sys path because
+    # the mock modules use absolute imports.
+    from circuitpython_mocks import board, busio
     from collections import deque
 
     i2c = board.I2C()
     assert hasattr(i2c, "expectations")
     assert isinstance(i2c.expectations, deque)
+    i2c_dupe = busio.I2C(board.SCL, board.SDA)
+    assert i2c == i2c_dupe
+    i2c.expectations.append(I2CRead(0x42, bytearray(1)))
+    assert i2c_dupe.expectations == i2c.expectations
+    op = i2c_dupe.expectations.popleft()
+    assert not i2c.expectations
+
+    i2c1 = board.STEMMA_I2C()
+    assert hasattr(i2c1, "expectations")
+    assert isinstance(i2c1.expectations, deque)
+    i2c1_dupe = busio.I2C(board.SCL1, board.SDA1)
+    assert i2c1 == i2c1_dupe
+    i2c1.expectations.append(op)
+    assert i2c1_dupe.expectations == i2c1.expectations
+    op = i2c1_dupe.expectations.popleft()
+    assert not i2c1.expectations

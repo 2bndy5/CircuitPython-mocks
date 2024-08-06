@@ -43,9 +43,27 @@ def test_spi():
 
 
 def test_default():
-    import board
+    # here we cannot import from the monkey-patched sys path because
+    # the mock modules use absolute imports.
+    from circuitpython_mocks import board, busio
     from collections import deque
 
     spi = board.SPI()
     assert hasattr(spi, "expectations")
     assert isinstance(spi.expectations, deque)
+    spi_dupe = busio.SPI(board.SCK, board.MOSI, board.MISO)
+    assert spi == spi_dupe
+    spi.expectations.append(SPIRead(bytearray(1)))
+    assert spi_dupe.expectations == spi.expectations
+    op = spi_dupe.expectations.popleft()
+    assert not spi.expectations
+
+    spi1 = busio.SPI(board.SCK_1, board.MOSI_1, board.MISO_1)
+    assert hasattr(spi1, "expectations")
+    assert isinstance(spi1.expectations, deque)
+    spi1_dupe = busio.SPI(board.SCK_1, board.MOSI_1, board.MISO_1)
+    assert spi1 == spi1_dupe
+    spi1.expectations.append(op)
+    assert spi1_dupe.expectations == spi1.expectations
+    _ = spi1_dupe.expectations.popleft()
+    assert not spi1.expectations
