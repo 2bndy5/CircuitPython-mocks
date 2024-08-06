@@ -40,6 +40,4 @@
 .. automodule:: circuitpython_mocks.digitalio.operations
 
     .. autoclass:: circuitpython_mocks.digitalio.operations.SetState
-        :members: __init__
     .. autoclass:: circuitpython_mocks.digitalio.operations.GetState
-        :members: __init__

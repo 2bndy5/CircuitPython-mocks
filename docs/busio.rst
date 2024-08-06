@@ -4,11 +4,11 @@
 .. automodule:: circuitpython_mocks.busio
 
     .. autoclass:: circuitpython_mocks.busio.I2C
-        :members: __init__, readfrom_into, writeto, writeto_then_readfrom, scan
+        :members: readfrom_into, writeto, writeto_then_readfrom, scan
     .. autoclass:: circuitpython_mocks.busio.SPI
-        :members: __init__, readinto, write, write_readinto, configure, frequency
+        :members: readinto, write, write_readinto, configure, frequency
     .. autoclass:: circuitpython_mocks.busio.UART
-        :members: __init__, readinto, readline, write
+        :members: readinto, readline, write
 
         .. py:class:: circuitpython_mocks.busio.UART.Parity
 

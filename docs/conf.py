@@ -20,10 +20,11 @@ extensions = [
     "sphinx_immaterial",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
     "sphinx_jinja",
 ]
 
-autodoc_class_signature = "separated"
+# autodoc_class_signature = "separated"
 autodoc_default_options = {
     "exclude-members": "__new__",
 }

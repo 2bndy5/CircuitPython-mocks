@@ -172,28 +172,28 @@ DOTSTAR = Pin()
 
 
 def SPI():
-    """Creates a default instance of :py:class:`~busio.SPI`"""
+    """Creates a default instance (singleton) of :py:class:`~busio.SPI`"""
     from circuitpython_mocks.busio import SPI as ImplSPI
 
     return ImplSPI(SCK, MOSI, MISO)
 
 
 def I2C():
-    """Creates a default instance of :py:class:`~busio.I2C`"""
+    """Creates a default instance (singleton) of :py:class:`~busio.I2C`"""
     from circuitpython_mocks.busio import I2C as ImplI2C
 
     return ImplI2C(SCL, SDA)
 
 
 def STEMMA_I2C():
-    """Creates a default instance of :py:class:`~busio.I2C`"""
+    """Creates a default instance (singleton) of :py:class:`~busio.I2C`"""
     from circuitpython_mocks.busio import I2C as ImplI2C
 
     return ImplI2C(SCL1, SDA1)
 
 
 def UART():
-    """Creates a default instance of :py:class:`~busio.UART`"""
+    """Creates a default instance (singleton) of :py:class:`~busio.UART`"""
     from circuitpython_mocks.busio import UART as ImplUART
 
     return ImplUART(TX, RX)
