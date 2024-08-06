@@ -1,6 +1,9 @@
 """A module that hosts mock pins and default :py:class:`~busio.SPI`,
 :py:class:`~busio.I2C`, and :py:class:`~busio.UART` data buses."""
 
+#: A dummy identifier to allow detection when using this mock library.
+board_id = "CIRCUITPYTHON_MOCK"
+
 
 class Pin:
     """A dummy type for GPIO pins."""
