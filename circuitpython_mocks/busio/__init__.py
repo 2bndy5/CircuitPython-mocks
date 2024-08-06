@@ -2,7 +2,7 @@
 
 from enum import Enum, auto
 import sys
-from typing import List
+from typing import List, Optional
 
 import circuitpython_typing
 
@@ -17,11 +17,39 @@ from circuitpython_mocks.busio.operations import (
     SPITransfer,
 )
 from circuitpython_mocks._mixins import Expecting, Lockable
-from circuitpython_mocks.board import Pin
+from circuitpython_mocks.board import (
+    Pin,
+    SDA,
+    SDA1,
+    SCL,
+    SCL1,
+    SCK,
+    MOSI as PinMOSI,
+    MISO as PinMISO,
+    TX,
+    RX,
+    MISO_1,
+    MOSI_1,
+    SCK_1,
+)
 
 
 class I2C(Expecting, Lockable):
-    """A mock of `busio.I2C` class."""
+    """A mock of :external:py:class:`busio.I2C` class."""
+
+    _primary_singleton: Optional["I2C"] = None
+    _secondary_singleton: Optional["I2C"] = None
+
+    def __new__(cls, scl: Pin, sda: Pin, **kwargs) -> "I2C":
+        if scl == SCL and sda == SDA:
+            if cls._primary_singleton is None:
+                cls._primary_singleton = super().__new__(cls)
+            return cls._primary_singleton
+        if scl == SCL1 and sda == SDA1:
+            if cls._secondary_singleton is None:
+                cls._secondary_singleton = super().__new__(cls)
+            return cls._secondary_singleton
+        return super().__new__(cls)
 
     def __init__(
         self,
@@ -31,6 +59,8 @@ class I2C(Expecting, Lockable):
         frequency: int = 100000,
         timeout: int = 255,
     ):
+        if hasattr(self, "expectations"):
+            return
         super().__init__()
 
     def scan(self) -> List[int]:
@@ -99,6 +129,22 @@ class I2C(Expecting, Lockable):
 
 
 class SPI(Expecting, Lockable):
+    """A mock of :external:py:class:`busio.SPI` class."""
+
+    _primary_singleton: Optional["SPI"] = None
+    _secondary_singleton: Optional["SPI"] = None
+
+    def __new__(cls, clock: Pin, MOSI: Pin, MISO: Pin, **kwargs) -> "SPI":
+        if clock == SCK and MOSI == PinMOSI and MISO == PinMISO:
+            if cls._primary_singleton is None:
+                cls._primary_singleton = super().__new__(cls)
+            return cls._primary_singleton
+        if clock == SCK_1 and MOSI == MOSI_1 and MISO == MISO_1:
+            if cls._secondary_singleton is None:
+                cls._secondary_singleton = super().__new__(cls)
+            return cls._secondary_singleton
+        return super().__new__(cls)
+
     def __init__(
         self,
         clock: Pin,
@@ -183,6 +229,15 @@ class SPI(Expecting, Lockable):
 class UART(Expecting, Lockable):
     """A class that mocks :external:py:class:`busio.UART`."""
 
+    _primary_singleton: Optional["UART"] = None
+
+    def __new__(cls, tx: Pin, rx: Pin, **kwargs) -> "UART":
+        if tx == TX and rx == RX:
+            if cls._primary_singleton is None:
+                cls._primary_singleton = super().__new__(cls)
+            return cls._primary_singleton
+        return super().__new__(cls)
+
     class Parity(Enum):
         ODD = auto()
         EVEN = auto()
@@ -250,3 +305,6 @@ class UART(Expecting, Lockable):
         len_buf = len(op.expected)
         op.assert_expected(buf, 0, len_buf)
         return len(buf) or None
+
+
+_UART = UART(TX, RX)

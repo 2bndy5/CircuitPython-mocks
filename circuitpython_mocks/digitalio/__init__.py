@@ -1,5 +1,5 @@
 from enum import Enum, auto
-
+from typing import Union, Optional
 from circuitpython_mocks._mixins import ContextManaged, Expecting
 from circuitpython_mocks.digitalio.operations import GetState, SetState
 from circuitpython_mocks.board import Pin
@@ -34,13 +34,17 @@ class DigitalInOut(Expecting, ContextManaged):
         self._pin = pin
         self.switch_to_input()
 
-    def switch_to_output(self, value=False, drive_mode=DriveMode.PUSH_PULL):
+    def switch_to_output(
+        self,
+        value: Union[bool, int] = False,
+        drive_mode: DriveMode = DriveMode.PUSH_PULL,
+    ):
         """Switch the Digital Pin Mode to Output"""
         self.direction = Direction.OUTPUT
         self.value = value
         self.drive_mode = drive_mode
 
-    def switch_to_input(self, pull=None):
+    def switch_to_input(self, pull: Optional[Pull] = None):
         """Switch the Digital Pin Mode to Input"""
         self.direction = Direction.INPUT
         self.pull = pull
@@ -50,12 +54,12 @@ class DigitalInOut(Expecting, ContextManaged):
         del self._pin
 
     @property
-    def direction(self):
+    def direction(self) -> Direction:
         """Get or Set the Digital Pin Direction"""
         return self.__direction
 
     @direction.setter
-    def direction(self, value):
+    def direction(self, value: Direction):
         self.__direction = value
         if value == Direction.OUTPUT:
             # self.value = False
@@ -66,7 +70,7 @@ class DigitalInOut(Expecting, ContextManaged):
             raise AttributeError("Not a Direction")
 
     @property
-    def value(self):
+    def value(self) -> Union[bool, int]:
         """The Digital Pin Value.
         This property will check against `SetState` and `GetState`
         :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`."""
@@ -78,7 +82,7 @@ class DigitalInOut(Expecting, ContextManaged):
         return op.state
 
     @value.setter
-    def value(self, val):
+    def value(self, val: Union[bool, int]):
         if self.direction != Direction.OUTPUT:
             raise AttributeError("Not an output")
         assert self.expectations, "No expectations found for DigitalInOut.value.setter"
@@ -89,25 +93,25 @@ class DigitalInOut(Expecting, ContextManaged):
         op.assert_state(val)
 
     @property
-    def pull(self):
+    def pull(self) -> Optional[Pull]:
         """The pin pull direction"""
         if self.direction == Direction.INPUT:
             return self.__pull
         raise AttributeError("Not an input")
 
     @pull.setter
-    def pull(self, pul):
+    def pull(self, pul: Optional[Pull]):
         if self.direction != Direction.INPUT:
             raise AttributeError("Not an input")
         self.__pull = pul
 
     @property
-    def drive_mode(self):
+    def drive_mode(self) -> DriveMode:
         """The Digital Pin Drive Mode"""
         if self.direction != Direction.OUTPUT:
             raise AttributeError("Not an output")
         return self.__drive_mode
 
     @drive_mode.setter
-    def drive_mode(self, mod):
+    def drive_mode(self, mod: DriveMode):
         self.__drive_mode = mod
