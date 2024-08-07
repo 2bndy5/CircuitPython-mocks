@@ -178,6 +178,13 @@ def SPI():
     return ImplSPI(SCK, MOSI, MISO)
 
 
+def SPI1():
+    """Creates a default instance (singleton) of :py:class:`~busio.SPI` (secondary bus)"""
+    from circuitpython_mocks.busio import SPI as ImplSPI
+
+    return ImplSPI(SCK_1, MOSI_1, MISO_1)
+
+
 def I2C():
     """Creates a default instance (singleton) of :py:class:`~busio.I2C`"""
     from circuitpython_mocks.busio import I2C as ImplI2C
@@ -186,7 +193,7 @@ def I2C():
 
 
 def STEMMA_I2C():
-    """Creates a default instance (singleton) of :py:class:`~busio.I2C`"""
+    """Creates a default instance (singleton) of :py:class:`~busio.I2C` (secondary bus)"""
     from circuitpython_mocks.busio import I2C as ImplI2C
 
     return ImplI2C(SCL1, SDA1)

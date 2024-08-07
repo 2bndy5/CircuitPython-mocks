@@ -4,9 +4,9 @@
 .. automodule:: circuitpython_mocks.busio
 
     .. autoclass:: circuitpython_mocks.busio.I2C
-        :members: readfrom_into, writeto, writeto_then_readfrom, scan
+        :members: readfrom_into, writeto, writeto_then_readfrom, scan, try_lock, unlock, deinit
     .. autoclass:: circuitpython_mocks.busio.SPI
-        :members: readinto, write, write_readinto, configure, frequency
+        :members: readinto, write, write_readinto, configure, frequency, try_lock, unlock, deinit
     .. autoclass:: circuitpython_mocks.busio.UART
         :members: readinto, readline, write
 

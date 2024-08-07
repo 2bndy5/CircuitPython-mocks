@@ -28,6 +28,7 @@ extensions = [
 autodoc_default_options = {
     "exclude-members": "__new__",
 }
+add_function_parentheses = False
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -37,7 +38,9 @@ jinja_contexts = {
         "pins": [
             x
             for x in dir(circuitpython_mocks.board)
-            if not x.startswith("_") and x not in ("Pin", "board_id")
+            if not x.startswith("_")
+            and x != "board_id"
+            and not callable(getattr(circuitpython_mocks.board, x))
         ]
     }
 }
@@ -93,3 +96,18 @@ html_theme_options = {
         },
     ],
 }
+
+sphinx_immaterial_custom_admonitions = [
+    {
+        "name": "seealso",
+        "color": "#e30e7c",
+        "override": True,
+        "icon": "material/eye-outline",
+    },
+    {
+        "name": "mock-expects",
+        "title": "Mock Expectations",
+        "color": "#0fe344",
+        "icon": "material/code-tags-check",
+    },
+]
