@@ -1,46 +1,26 @@
-from circuitpython_mocks import monkey_patch_sys_paths  # noqa: F401 (1)
-from circuitpython_mocks.busio.operations import (
-    UARTRead,
-    UARTWrite,
-)
+from collections import deque
+from circuitpython_mocks import board, busio
+from circuitpython_mocks.busio.operations import UARTRead, UARTWrite
 
 
-def test_uart():
-    from busio import UART
-    import board
+def test_singleton():
+    board_uart = board.UART()
+    assert hasattr(board_uart, "expectations")
+    assert isinstance(board_uart.expectations, deque)
 
-    # do setup
-    with UART(board.TX, board.RX) as serial:
-        # set expectations for SPI bus
-        serial.expectations.extend(
-            [
-                UARTRead(bytearray(1)),
-                UARTRead(bytearray(1)),
-                UARTRead(bytearray(1)),
-                UARTWrite(bytearray(1)),
-            ]
-        )
+    busio_uart = busio.UART(board.TX, board.RX)
+    assert board_uart == busio_uart
 
-        # do test
-        buf = bytearray(1)
-        _result = serial.read(1)
-        serial.readinto(buf)
-        _result = serial.readline()
-        assert serial.write(buf) == 1
+    board_uart.expectations.append(UARTRead(bytearray(1)))
+    assert busio_uart.expectations == board_uart.expectations
+    buffer = bytearray(1)
+    board_uart.readinto(buffer)
+    assert not busio_uart.expectations
 
+    busio_uart.expectations.append(UARTWrite(bytearray(1)))
+    assert busio_uart.expectations == board_uart.expectations
+    busio_uart.write(bytearray(1))
 
-def test_default():
-    # here we cannot import from the monkey-patched sys path because
-    # the mock modules use absolute imports.
-    from circuitpython_mocks import board, busio
-    from collections import deque
-
-    uart = board.UART()
-    assert hasattr(uart, "expectations")
-    assert isinstance(uart.expectations, deque)
-    uart_dupe = busio.UART(board.TX, board.RX)
-    assert uart == uart_dupe
-    uart.expectations.append(UARTRead(bytearray(1)))
-    assert uart_dupe.expectations == uart.expectations
-    _ = uart_dupe.expectations.popleft()
-    assert not uart.expectations
+    # assert all expectations were used
+    board_uart.done()
+    assert busio_uart.expectations == board_uart.expectations
