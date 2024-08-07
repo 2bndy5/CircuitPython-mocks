@@ -47,7 +47,14 @@ class DigitalInOut(Expecting, ContextManaged):
         value: Union[bool, int] = False,
         drive_mode: DriveMode = DriveMode.PUSH_PULL,
     ):
-        """Switch the Digital Pin Mode to Output"""
+        """Switch the Digital Pin Mode to Output.
+
+        .. mock-expects::
+
+            This function also changes the state of the pin's `value`.
+            So, this function will check against `SetState`
+            :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`.
+        """
         self.direction = Direction.OUTPUT
         self.value = value
         self.drive_mode = drive_mode
