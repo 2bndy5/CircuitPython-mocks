@@ -2,7 +2,7 @@ import sys
 import circuitpython_typing as cir_py_types
 
 
-class Write:
+class _Write:
     """A class to identify a write operation over a data bus."""
 
     def __init__(self, expected: bytearray, **kwargs) -> None:
@@ -26,7 +26,7 @@ class Write:
         ), "Write.response does not match given buffer (or slice)"
 
 
-class Read:
+class _Read:
     """A class to identify a read operation over a data bus."""
 
     def __init__(self, response: bytearray, **kwargs) -> None:
@@ -51,7 +51,7 @@ class Read:
         buffer[start:end] = self.response
 
 
-class Transfer(Read, Write):
+class _Transfer(_Read, _Write):
     """A class to identify a read/write (transfer) operation over a data bus."""
 
     def __init__(self, expected: bytearray, response: bytearray, **kwargs) -> None:
@@ -98,8 +98,9 @@ class _I2CAddress:
         assert address == self.address, "I2C address does not match given address"
 
 
-class I2CWrite(Write, _I2CAddress):
-    """A class to identify a write operation over a I2C bus."""
+class I2CWrite(_Write, _I2CAddress):
+    """A class to identify a write operation over a
+    :py:class:`~circuitpython_mocks.busio.I2C` bus."""
 
     def __init__(self, address: int, expected: bytearray) -> None:
         super().__init__(expected=expected, address=address)
@@ -110,8 +111,9 @@ class I2CWrite(Write, _I2CAddress):
         return f"<Write address='{addr_hex}' expected='{stringify}'>"
 
 
-class I2CRead(Read, _I2CAddress):
-    """A class to identify a read operation over a I2C bus."""
+class I2CRead(_Read, _I2CAddress):
+    """A class to identify a read operation over a
+    :py:class:`~circuitpython_mocks.busio.I2C` bus."""
 
     def __init__(self, address: int, response: bytearray) -> None:
         super().__init__(response=response, address=address)
@@ -122,8 +124,9 @@ class I2CRead(Read, _I2CAddress):
         return f"<Read address={addr_hex} response='{stringify}'>"
 
 
-class I2CTransfer(Transfer, _I2CAddress):
-    """A class to identify a write operation over a I2C bus."""
+class I2CTransfer(_Transfer, _I2CAddress):
+    """A class to identify a write operation over a
+    :py:class:`~circuitpython_mocks.busio.I2C` bus."""
 
     def __init__(self, address: int, expected: bytearray, response: bytearray) -> None:
         super().__init__(expected=expected, response=response, address=address)
@@ -137,20 +140,23 @@ class I2CTransfer(Transfer, _I2CAddress):
         )
 
 
-class SPIRead(Read):
-    """A class to identify a read operation over a SPI bus."""
+class SPIRead(_Read):
+    """A class to identify a read operation over a
+    :py:class:`~circuitpython_mocks.busio.SPI` bus."""
 
     pass
 
 
-class SPIWrite(Write):
-    """A class to identify a write operation over a SPI bus."""
+class SPIWrite(_Write):
+    """A class to identify a write operation over a
+    :py:class:`~circuitpython_mocks.busio.SPI` bus."""
 
     pass
 
 
-class SPITransfer(Transfer):
-    """A class to identify a read/write (transfer) operation over a SPI bus."""
+class SPITransfer(_Transfer):
+    """A class to identify a read/write (transfer) operation over a
+    :py:class:`~circuitpython_mocks.busio.SPI` bus."""
 
     def assert_transaction(
         self,
@@ -170,13 +176,15 @@ class SPITransfer(Transfer):
         )
 
 
-class UARTRead(Read):
-    """A class to identify a read operation over a UART bus."""
+class UARTRead(_Read):
+    """A class to identify a read operation over a
+    :py:class:`~circuitpython_mocks.busio.UART` bus."""
 
     pass
 
 
-class UARTWrite(Write):
-    """A class to identify a write operation over a UART bus."""
+class UARTWrite(_Write):
+    """A class to identify a write operation over a
+    :py:class:`~circuitpython_mocks.busio.UART` bus."""
 
     pass
