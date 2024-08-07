@@ -1,3 +1,11 @@
+"""A mock of the :external:py:mod:`digitalio` module.
+
+.. literalinclude:: ../tests/test_dio.py
+    :language: python
+    :end-at: dio.done()
+    :start-after: import pytest
+"""
+
 from enum import Enum, auto
 from typing import Union, Optional
 from circuitpython_mocks._mixins import ContextManaged, Expecting
@@ -72,8 +80,12 @@ class DigitalInOut(Expecting, ContextManaged):
     @property
     def value(self) -> Union[bool, int]:
         """The Digital Pin Value.
-        This property will check against `SetState` and `GetState`
-        :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`."""
+
+        .. mock-expects::
+
+            This property will check against `SetState` and `GetState`
+            :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`.
+        """
         assert self.expectations, "No expectations found for DigitalInOut.value.getter"
         op = self.expectations.popleft()
         assert isinstance(

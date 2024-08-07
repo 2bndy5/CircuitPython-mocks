@@ -193,7 +193,7 @@ def I2C():
 
 
 def STEMMA_I2C():
-    """Creates a default instance (singleton) of :py:class:`~busio.I2C`"""
+    """Creates a default instance (singleton) of :py:class:`~busio.I2C` (secondary bus)"""
     from circuitpython_mocks.busio import I2C as ImplI2C
 
     return ImplI2C(SCL1, SDA1)

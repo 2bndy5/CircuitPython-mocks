@@ -28,6 +28,7 @@ extensions = [
 autodoc_default_options = {
     "exclude-members": "__new__",
 }
+add_function_parentheses = False
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -93,3 +94,18 @@ html_theme_options = {
         },
     ],
 }
+
+sphinx_immaterial_custom_admonitions = [
+    {
+        "name": "seealso",
+        "color": "#e30e7c",
+        "override": True,
+        "icon": "material/eye-outline",
+    },
+    {
+        "name": "mock-expects",
+        "title": "Mock Expectations",
+        "color": "#0fe344",
+        "icon": "material/code-tags-check",
+    },
+]
