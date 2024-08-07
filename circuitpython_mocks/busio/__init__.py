@@ -305,6 +305,3 @@ class UART(Expecting, Lockable):
         len_buf = len(op.expected)
         op.assert_expected(buf, 0, len_buf)
         return len(buf) or None
-
-
-_UART = UART(TX, RX)
