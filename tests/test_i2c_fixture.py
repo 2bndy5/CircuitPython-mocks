@@ -2,6 +2,7 @@ from circuitpython_mocks.busio.operations import (
     I2CRead,
     I2CWrite,
     I2CTransfer,
+    I2CScan,
 )
 
 pytest_plugins = ["circuitpython_mocks.fixtures"]
@@ -15,7 +16,10 @@ def test_i2c(mock_blinka_imports):
     address = 0x42
     # do setup
     with I2C(board.SCL, board.SDA) as i2c_bus:
-        assert i2c_bus.scan() == []
+        i2c_bus.expectations.append(I2CScan([address]))
+        assert i2c_bus.try_lock()
+        assert address in i2c_bus.scan()
+        i2c_bus.unlock()
 
         # set expectation for probing performed by I2CDevice.__init__()
         i2c_bus.expectations.append(I2CWrite(address, b""))
