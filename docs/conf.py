@@ -38,7 +38,9 @@ jinja_contexts = {
         "pins": [
             x
             for x in dir(circuitpython_mocks.board)
-            if not x.startswith("_") and x not in ("Pin", "board_id")
+            if not x.startswith("_")
+            and x != "board_id"
+            and not callable(getattr(circuitpython_mocks.board, x))
         ]
     }
 }
