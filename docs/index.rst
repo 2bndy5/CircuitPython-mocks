@@ -20,7 +20,7 @@ Mocked API
 ----------
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 4
 
     busio/index
 
