@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import sys
 import circuitpython_typing as cir_py_types
 
@@ -196,13 +196,46 @@ class SPITransfer(_Transfer):
 
 class UARTRead(_Read):
     """A class to identify a read operation over a
-    :py:class:`~circuitpython_mocks.busio.UART` bus."""
+    :py:class:`~circuitpython_mocks.busio.UART` bus.
 
-    pass
+    .. tip::
+        To emulate a timeout condition, pass a `None` value to the ``response``
+        parameter.
+    """
+
+    def __init__(self, response: Optional[bytearray], **kwargs) -> None:
+        super().__init__(response, **kwargs)  # type: ignore[arg-type]
+
+    def __repr__(self) -> str:
+        if not self.response:
+            return "<Read response='None'>"
+        return super().__repr__()
+
+    def assert_response(
+        self,
+        buffer: cir_py_types.ReadableBuffer,
+        start: int = 0,
+        end: int = sys.maxsize,
+    ):
+        if not self.response:
+            buffer = self.response
+            return
+        return super().assert_response(buffer, start, end)
 
 
 class UARTWrite(_Write):
     """A class to identify a write operation over a
     :py:class:`~circuitpython_mocks.busio.UART` bus."""
+
+    pass
+
+
+class UARTFlush:
+    """A class to identify a flush operation over a
+    :py:class:`~circuitpython_mocks.busio.UART` bus.
+
+    This operation corresponds to the function
+    :py:meth:`~circuitpython_mocks.busio.UART.reset_input_buffer()`.
+    """
 
     pass

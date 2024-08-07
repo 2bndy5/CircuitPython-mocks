@@ -20,8 +20,12 @@ Mocked API
 ----------
 
 .. toctree::
+    :maxdepth: 3
+
+    busio/index
+
+.. toctree::
     :maxdepth: 2
 
-    busio
     digitalio
     board
