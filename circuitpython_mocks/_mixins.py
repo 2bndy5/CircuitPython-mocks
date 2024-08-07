@@ -12,6 +12,7 @@ if TYPE_CHECKING:
         SPITransfer,
         UARTRead,
         UARTWrite,
+        UARTFlush,
     )
     from circuitpython_mocks.digitalio.operations import SetState, GetState
 
@@ -79,6 +80,7 @@ class Expecting:
                 SPITransfer,
                 UARTRead,
                 UARTWrite,
+                UARTFlush,
                 SetState,
                 GetState,
             ]
@@ -90,7 +92,7 @@ class Expecting:
 
             Examples that use `expectations` can be found in the
 
-            - :doc:`busio` documentation
+            - :doc:`busio/index` documentation
             - :doc:`digitalio`  documentation
             - :py:func:`~circuitpython_mocks.fixtures.mock_blinka_imports`
               (pytest fixture) documentation
