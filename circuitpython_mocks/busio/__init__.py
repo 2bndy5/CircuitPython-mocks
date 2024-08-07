@@ -30,6 +30,7 @@ from circuitpython_mocks.busio.operations import (
     I2CRead,
     I2CWrite,
     I2CTransfer,
+    I2CScan,
     SPIRead,
     SPIWrite,
     SPITransfer,
@@ -82,9 +83,18 @@ class I2C(Expecting, Lockable):
         super().__init__()
 
     def scan(self) -> List[int]:
-        """Returns an empty list.
-        Use :py:meth:`pytest.MonkeyPatch.setattr()` to change this output."""
-        return []
+        """Scan all I2C addresses between 0x08 and 0x77 inclusive and return a list of
+        those that respond.
+
+        .. mock-expects::
+
+            This function will check against `I2CScan`
+            :py:attr:`~circuitpython_mocks._mixins.Expecting.expectations`.
+        """
+        assert self.expectations, "no expectation found for I2C.scan()"
+        op = self.expectations.popleft()
+        assert isinstance(op, I2CScan), f"I2CScan operation expected, found {repr(op)}"
+        return op.expected
 
     def readfrom_into(
         self,

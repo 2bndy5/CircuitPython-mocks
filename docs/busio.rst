@@ -30,6 +30,7 @@
     .. autoclass:: circuitpython_mocks.busio.operations.I2CRead
     .. autoclass:: circuitpython_mocks.busio.operations.I2CWrite
     .. autoclass:: circuitpython_mocks.busio.operations.I2CTransfer
+    .. autoclass:: circuitpython_mocks.busio.operations.I2CScan
 
     SPI operations
     **************

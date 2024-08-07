@@ -1,3 +1,4 @@
+from typing import List
 import sys
 import circuitpython_typing as cir_py_types
 
@@ -138,6 +139,23 @@ class I2CTransfer(_Transfer, _I2CAddress):
         return (
             f"<Transfer address={addr_hex} expected='{expected}' response='{response}'>"
         )
+
+
+class I2CScan:
+    """A class to identify a scan operation over a
+    :py:class:`~circuitpython_mocks.busio.I2C` bus.
+
+    The given ``expected`` value will be the result of `I2C.scan()`.
+    """
+
+    def __init__(self, expected: List[int]) -> None:
+        for val in expected:
+            assert val <= 0x7F, f"scan result {val} is not a valid I2C address"
+        self.expected = expected
+
+    def __repr__(self) -> str:
+        stringify = ", ".join(["%02X" % x for x in self.expected])
+        return f"<I2CScan expected='[{stringify}]'>"
 
 
 class SPIRead(_Read):
