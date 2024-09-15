@@ -3,7 +3,7 @@ from typing import Deque, Union, TYPE_CHECKING
 
 try:
     from typing import Self
-except ImportError:
+except ImportError:  # pragma: no cover
     from typing_extensions import Self
 
 
