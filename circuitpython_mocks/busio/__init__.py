@@ -20,7 +20,7 @@
 
 from enum import Enum, auto
 import sys
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import circuitpython_typing
 
@@ -189,8 +189,8 @@ class SPI(Expecting, Lockable):
     def __init__(
         self,
         clock: Pin,
-        MOSI: Pin | None = None,
-        MISO: Pin | None = None,
+        MOSI: Union[Pin, None] = None,
+        MISO: Union[Pin, None] = None,
         half_duplex: bool = False,
     ):
         """A class to mock :external:py:class:`busio.SPI`."""
@@ -297,16 +297,16 @@ class UART(Expecting, Lockable):
 
     def __init__(
         self,
-        tx: Pin | None = None,
-        rx: Pin | None = None,
+        tx: Union[Pin, None] = None,
+        rx: Union[Pin, None] = None,
         *,
-        rts: Pin | None = None,
-        cts: Pin | None = None,
-        rs485_dir: Pin | None = None,
+        rts: Union[Pin, None] = None,
+        cts: Union[Pin, None] = None,
+        rs485_dir: Union[Pin, None] = None,
         rs485_invert: bool = False,
         baudrate: int = 9600,
         bits: int = 8,
-        parity: Parity | None = None,
+        parity: Union[Parity, None] = None,
         stop: int = 1,
         timeout: float = 1,
         receiver_buffer_size: int = 64,
@@ -315,7 +315,7 @@ class UART(Expecting, Lockable):
         self._timeout = timeout
         super().__init__()
 
-    def read(self, nbytes: int | None = None) -> Optional[bytes]:
+    def read(self, nbytes: Union[int, None] = None) -> Optional[bytes]:
         """A function that mocks :external:py:meth:`busio.UART.read()`.
 
         .. mock-expects::
@@ -362,7 +362,7 @@ class UART(Expecting, Lockable):
         op.assert_response(buf, 0, len_buf)
         return None if buf else bytes(buf)
 
-    def write(self, buf: circuitpython_typing.ReadableBuffer) -> int | None:
+    def write(self, buf: circuitpython_typing.ReadableBuffer) -> Union[int, None]:
         """A function that mocks :external:py:meth:`busio.UART.write()`.
 
         .. mock-expects::
