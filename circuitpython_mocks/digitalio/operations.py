@@ -1,8 +1,11 @@
+from typing import Union
+
+
 class _State:
-    def __init__(self, state: bool | int) -> None:
+    def __init__(self, state: Union[bool, int]) -> None:
         self.state = bool(state)
 
-    def assert_state(self, value: bool | int):
+    def assert_state(self, value: Union[bool, int]):
         assert self.state is bool(
             value
         ), "Expected pin state does not match given pin state"

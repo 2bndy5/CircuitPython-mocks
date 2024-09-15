@@ -1,5 +1,11 @@
 from collections import deque
-from typing import Self, Deque, Union, TYPE_CHECKING
+from typing import Deque, Union, TYPE_CHECKING
+
+try:
+    from typing import Self
+except ImportError:  # pragma: no cover
+    from typing_extensions import Self
+
 
 if TYPE_CHECKING:
     from circuitpython_mocks.busio.operations import (
