@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  run:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.x'
       - name: Install dependencies
-        run: pip install -r tests/requirements.txt -e . -r requirements-dev.txt
+        run: pip install -e . -r requirements-dev.txt
       - name: Cache pre-commit venv(s)
         uses: actions/cache@v4
         with:
@@ -26,10 +26,46 @@ jobs:
           key: pre-commit_${{ steps.setup-python.outputs.python-version }}_${{ hashfiles('.pre-commit-config.yaml') }}
       - name: Run pre-commit hooks
         run: pre-commit run --all-files
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: pip install -r tests/requirements.txt
       - name: Run tests and collect coverage
-        run: coverage run -m pytest
+        run: coverage run --parallel-mode -m pytest
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: .coverage*
+          name: coverage-data-py${{ matrix.python-version }}
+          include-hidden-files: true
+  report:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-data-py*
+          path: ci-artifacts
+      - run: mv ci-artifacts/**/.coverage* ./
+      - name: Install dependencies
+        run: pip install coverage
       - name: Create coverage report
-        run: coverage xml
+        run: |
+          coverage combine
+          coverage xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
